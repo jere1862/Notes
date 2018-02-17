@@ -1,0 +1,31 @@
+<h1>Create a new note</h1>
+
+<%= @title%>
+
+<%= form_with scope: :note, url: notes_path, local: true do |form| %>
+
+    <% if @note.errors.any? %>
+        <h1>
+            <%=@note.errors.count%> errors
+
+            <%@note.errors.full_messages.each do |error|%>
+                <h2>
+                    <%=error%>
+                </h2>
+            <%end%>
+        </h1>
+    <% end%>
+
+    <p>
+        <%=form.label :title%><br>
+        <%=form.text_field :title%>
+    </p>
+    
+    <p>
+        <%=form.label :text%><br>
+        <%=form.text_field :text%>
+    </p>
+    <p>
+        <%=form.submit%>
+    </p>
+<%end%>

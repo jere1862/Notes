@@ -1,0 +1,15 @@
+
+
+<% @notes.each do |note| %>
+    <p>
+        Title: <%=note.title%>
+    </p>
+    <p>
+        <%=note.text%> </br></br>
+    </p>
+    <p><%=link_to 'Show', note%></p>
+    <p><%=link_to 'Edit', edit_note_path(note)%></p>
+    <p><%=link_to 'Delete', note_path(note),
+        method: :delete,
+        data: {confirm: 'Are you sure?'}%></p>
+<%end%>
