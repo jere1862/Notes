@@ -1,5 +1,5 @@
 import React from "react"
-import NoteDisplay from './NoteDisplay.jsx'
+import NoteEditor from './NoteEditor.jsx'
 import NoteList from './NoteList.jsx'
 
 class NotesContainer extends React.Component {
@@ -7,7 +7,7 @@ class NotesContainer extends React.Component {
     return (
       <div id="notes-container">
         <NoteList></NoteList>
-        <NoteDisplay></NoteDisplay>
+        <NoteEditor></NoteEditor>
       </div>
     );
   }
