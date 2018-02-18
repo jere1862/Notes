@@ -1,13 +1,13 @@
 import React from "react"
+import NoteListElement from './NoteListElement'
 
 class NoteList extends React.Component {
   render () {
     return (
       <div id="note-list">
         <div>
-          <div className="note-list-element" title="Alllo"></div>
-          <div className="note-list-element" title="OtherNote"></div>
-          <div className="note-list-element" title="beau chat"></div>
+          <NoteListElement className="active" noteTitle="ALlooo"></NoteListElement>
+          <NoteListElement className="active" noteTitle="ALlooo"></NoteListElement>
         </div>
       </div>
     );

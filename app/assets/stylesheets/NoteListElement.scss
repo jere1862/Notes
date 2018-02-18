@@ -1,0 +1,47 @@
+@import 'application';
+@import 'NotesContainer';
+
+.note-list-element {
+    @extend %drop-shadow;
+    background-color: $lightest-color;
+    width: 100%;
+    height: 17%;
+    margin: 3% 0;
+    display: flex;
+    flex-direction: column;
+
+    >div {
+        justify-items: center;
+    }
+
+    // For hover :off
+    animation: 0.3s shrink forwards;
+    -webkit-animation: 0.3s shrink forwards;
+
+    transition: all 150ms ease-in;
+    transform-origin: center;
+    transform: scale(1.00, 1.00);
+    
+}
+
+.note-list-element:not(.active) {
+    opacity: 0.4;
+}
+
+.note-list-element:not(.active):hover {
+    transition: 200ms ease-in;
+    opacity: 0.6;
+}
+
+.note-list-element:hover {
+    transition: all 200ms ease-in;
+
+    transform-origin: center;
+    transform: scale(1.02, 1.02);
+}
+
+.note-list-element p {
+    opacity: 1;
+    text-align: left;
+    margin: 3%;
+}

@@ -19,7 +19,6 @@
     }
 }
 
-
 #note-display {
     height: 100%;
     width: 70%;
@@ -32,39 +31,14 @@
     width: 23%;
     background-color: $lighter-color;
     padding: 0 1%;
+    padding-bottom: 0;
 
     >div {
         display: flex;
         flex-direction: column;
         height: 100%;
         width: 100%;
-        margin: 2% 0;
+        margin-top: 1%;
+        //margin: 2% 0;
     }
-}
-
-.note-list-element {
-    @extend %drop-shadow;
-    background-color: $lightest-color;
-    width: 100%;
-    height: 17%;
-    margin: 3% 0;
-
-    // For hover :off
-    animation: 0.3s shrink forwards;
-    -webkit-animation: 0.3s shrink forwards;
-
-    transition: all 150ms ease-in;
-    transform-origin: center;
-    transform: scale(1.00, 1.00);
-
-    :not(.active) {
-        opacity: 0;
-    }
-}
-
-.note-list-element:hover {
-    transition: all 200ms ease-in;
-
-    transform-origin: center;
-    transform: scale(1.02, 1.02);
 }
