@@ -4,7 +4,7 @@ class NoteListElement extends React.Component {
   render () {
     return (
       <div className="note-list-element active">
-        <p>Allo</p>
+        <p>{this.props.noteTitle}</p>
       </div>
     );
   }

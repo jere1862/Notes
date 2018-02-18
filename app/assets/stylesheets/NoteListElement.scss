@@ -1,5 +1,6 @@
 @import 'application';
 @import 'NotesContainer';
+@import 'welcome';
 
 .note-list-element {
     @extend %drop-shadow;
@@ -9,9 +10,16 @@
     margin: 3% 0;
     display: flex;
     flex-direction: column;
-
-    >div {
-        justify-items: center;
+    cursor: pointer;
+    
+    >p {
+        @extend %text-center-vertically;
+        margin-left: 5%;
+        align-self: center;
+        -webkit-user-select: none; /* Safari */        
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE10+/Edge */
+        user-select: none; /* Standard */
     }
 
     // For hover :off

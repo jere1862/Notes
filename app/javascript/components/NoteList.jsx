@@ -6,8 +6,11 @@ class NoteList extends React.Component {
     return (
       <div id="note-list">
         <div>
-          <NoteListElement className="active" noteTitle="ALlooo"></NoteListElement>
-          <NoteListElement className="active" noteTitle="ALlooo"></NoteListElement>
+          {
+            this.props.notes.map((note, index) => (
+              <NoteListElement key={index} noteTitle={note.title}></NoteListElement>
+            ))
+          }
         </div>
       </div>
     );

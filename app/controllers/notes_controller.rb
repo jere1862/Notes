@@ -18,7 +18,7 @@ class NotesController < ApplicationController
 
     def update
         @note = Note.find(params[:id])
-       
+       puts "test"
         if @note.update(note_params)
           redirect_to @note
         else
