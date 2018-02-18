@@ -7,7 +7,7 @@ class NotesContainer extends React.Component {
     return (
       <div id="notes-container">
         <NoteList></NoteList>
-        <NoteEditor></NoteEditor>
+        <NoteEditor noteTitle="Test"></NoteEditor>
       </div>
     );
   }
