@@ -1,0 +1,70 @@
+@import 'application';
+
+%drop-shadow {
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+#notes-container {
+    @extend %drop-shadow;
+    border-radius: 20px;
+    height: 100%;
+    width: 100%;
+    background-color: $primary-color;
+    display: flex;
+    padding: 3% 2%;
+
+    >div {
+        @extend %drop-shadow;
+        margin: 0 1.5%;
+    }
+}
+
+
+#note-display {
+    height: 100%;
+    width: 70%;
+    background-color: $lightest-color;
+}
+
+#note-list {
+    @extend %drop-shadow;
+    height: 100%;
+    width: 23%;
+    background-color: $lighter-color;
+    padding: 0 1%;
+
+    >div {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        margin: 2% 0;
+    }
+}
+
+.note-list-element {
+    @extend %drop-shadow;
+    background-color: $lightest-color;
+    width: 100%;
+    height: 17%;
+    margin: 3% 0;
+
+    // For hover :off
+    animation: 0.3s shrink forwards;
+    -webkit-animation: 0.3s shrink forwards;
+
+    transition: all 150ms ease-in;
+    transform-origin: center;
+    transform: scale(1.00, 1.00);
+
+    :not(.active) {
+        opacity: 0;
+    }
+}
+
+.note-list-element:hover {
+    transition: all 200ms ease-in;
+
+    transform-origin: center;
+    transform: scale(1.02, 1.02);
+}

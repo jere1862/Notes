@@ -1,3 +1,75 @@
 // Place all the styles related to the Welcome controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "application";
+
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: $lightest-color;
+}
+
+%layout-element {
+    width: 100%;
+    background-color: $darker-color;
+    color: $lightest-color;
+}
+
+%text-center-vertically {
+    height: 90%;
+    margin: 0 0;
+    display: flex;
+    align-items: center;
+}
+
+%center-both-axis {
+    @extend %text-center-vertically;
+    justify-content: center;
+    text-align: center;
+}
+
+#main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+#header {
+    @extend %layout-element;
+
+    font-size: xx-large;
+    height: 15%;
+
+    >h1 {
+        @extend %center-both-axis;
+        letter-spacing: 10px;
+        font-size: 175%;
+    }
+}
+
+#content {
+    @extend %center-both-axis;
+    display: flex;
+    >div {
+        @extend %center-both-axis;
+        width: 80%;
+        height: 70%;
+    }
+}
+
+#footer {
+    @extend %layout-element;
+    height: 7%;
+
+    >h1 {
+        @extend %text-center-vertically;
+        
+        margin-right: 1%;
+        justify-content: flex-end;
+    }
+}

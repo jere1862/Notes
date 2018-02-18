@@ -1,5 +1,7 @@
 class WelcomeController < ApplicationController
   def index
-    puts "hello"
+    @notes = Note.all
+
+    puts @notes.inspect
   end
 end
