@@ -47,7 +47,8 @@ class NoteEditor extends React.Component {
     if(command == 'editor-save') {
       const rawJson = JSON.stringify({
         title: this.state.currentNote.title,
-        text: convertToRaw(this.state.editorState.getCurrentContent())
+        text: "temptext",
+        rawtext: convertToRaw(this.state.editorState.getCurrentContent())
       });
       const options = {
         body: rawJson,
@@ -57,7 +58,7 @@ class NoteEditor extends React.Component {
         method: 'PUT'
       }
 
-      fetch('/notes/'+this.state.currentNote.id, options)
+      fetch('/api/v1/notes/'+this.state.currentNote.id, options)
         .then(res => console.log(res));
     }
   }

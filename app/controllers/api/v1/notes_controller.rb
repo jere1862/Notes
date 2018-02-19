@@ -1,8 +1,9 @@
+require 'json'
 class Api::V1::NotesController < Api::V1::BaseController   
     def index
         @notes = Note.all
         #respond_with @notes
-        respond_with :api, :v1
+        respond_with :api, :v1, @notes
     end
 
     def new
@@ -19,12 +20,7 @@ class Api::V1::NotesController < Api::V1::BaseController
 
     def update
         @note = Note.find(params[:id])
-       puts "test"
-        if @note.update(note_params)
-          redirect_to @note
-        else
-          render 'edit'
-        end
+        respond_with @note.update(note_params)
     end
 
     def create
@@ -46,6 +42,6 @@ class Api::V1::NotesController < Api::V1::BaseController
 
     private
         def note_params
-            params.require(:note).permit(:title, :text)
+            params.require(:note).permit(:title, :text, rawtext: {})
         end
 end

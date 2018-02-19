@@ -1,4 +1,4 @@
 class Note < ApplicationRecord
-    validates :title, presence: true, length: {minimum: 5}
-    validates :text, presence: true, length: {minimum: 1}
+    validates :title, presence: true, length: {minimum: 1}
+    serialize :rawtext
 end
