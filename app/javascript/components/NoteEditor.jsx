@@ -75,7 +75,7 @@ class NoteEditor extends React.Component {
     const onClick = (type) => this._onClick.bind(this, type);
     return (
         <div id="note-editor-container">
-          <h1>{this.props.currentNote.title}</h1>
+          <h1>{this.props.currentNote && this.props.currentNote.title}</h1>
           <button className="link" onClick={onClick('H1')}>H1</button>
           <button className="link" onClick={onClick('H2')}>H2</button>
           <button className="link" onClick={onClick('H3')}>H3</button>
