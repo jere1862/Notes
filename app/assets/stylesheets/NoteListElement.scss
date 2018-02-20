@@ -1,25 +1,20 @@
 @import 'application';
 @import 'NotesContainer';
-@import 'welcome';
 
 .note-list-element {
     @extend %drop-shadow;
     background-color: $lightest-color;
     width: 100%;
     height: 17%;
-    margin: 3% 0;
+    margin-bottom: 3%;
     display: flex;
     flex-direction: column;
     cursor: pointer;
-    
-    >p {
-        @extend %text-center-vertically;
-        margin-left: 5%;
-        align-self: center;
-        -webkit-user-select: none; /* Safari */        
-        -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* IE10+/Edge */
-        user-select: none; /* Standard */
+    justify-content: space-around;
+
+    >div {
+        justify-items: center;
+        align-items: center;
     }
 
     // For hover :off

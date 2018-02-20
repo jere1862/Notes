@@ -2,7 +2,6 @@ require 'json'
 class Api::V1::NotesController < Api::V1::BaseController   
     def index
         @notes = Note.all
-        #respond_with @notes
         respond_with :api, :v1, @notes
     end
 
@@ -25,12 +24,8 @@ class Api::V1::NotesController < Api::V1::BaseController
 
     def create
         @note = Note.new(note_params)
-
-        if @note.save
-            redirect_to @note
-        else
-            render 'new'
-        end
+        @note.save
+        respond_with @note
     end
 
     def destroy

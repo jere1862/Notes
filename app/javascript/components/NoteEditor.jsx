@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from 'react-dom';
-import {Editor, EditorState, RichUtils, SelectionState, convertFromRaw, convertToRaw} from 'draft-js';
+import {Editor, EditorState, RichUtils, SelectionState, convertFromRaw, convertToRaw, convertFromHTML, ContentState} from 'draft-js';
 import {getDefaultKeyBinding, KeyBindingUtil} from 'draft-js';
 
 const {hasCommandModifier, isCtrlKeyCommand} = KeyBindingUtil;
@@ -12,7 +12,6 @@ function myKeyBindingFn(e) {
 
   return getDefaultKeyBinding(e);
 }
-
 
 const styleMap = {
   'H1': {
@@ -26,6 +25,8 @@ const styleMap = {
   }
 }
 
+const toH1Markup = (text) => `<h1>${text}</h1>`
+
 class NoteEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -35,8 +36,23 @@ class NoteEditor extends React.Component {
       editorState: EditorState.createEmpty()
     };
     
+    this.state.titleEditorState = EditorState.createWithContent(this.setTitle(this.state.currentNote && this.state.currentNote.title || "New note"));
+    
     this.onChange = (editorState) => this.setState({editorState});
+    this.onTitleChange = (titleEditorState) => this.setState({titleEditorState})
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
+  }
+
+  setTitle(title) {
+    const blocksFromHTML = convertFromHTML(toH1Markup(title));
+    return ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      //currentNote: nextProps.currentNote,
+      //titleEditorState: EditorState.createWithContent(this.setTitle(nextProps.title || "New note"))
+    });
   }
 
   componentDidMount(){
@@ -44,12 +60,17 @@ class NoteEditor extends React.Component {
   }
 
   handleKeyCommand(command) {
+    // Bug:
+    // Save new note
+    // Note gets added to the note list
+    // Current note does not get assigned to the new note
     if(command == 'editor-save') {
       const rawJson = JSON.stringify({
-        title: this.state.currentNote.title,
-        text: "temptext",
+        title: this.state.titleEditorState.getCurrentContent().getPlainText(),
+        text: this.state.editorState.getCurrentContent().getPlainText(),
         rawtext: convertToRaw(this.state.editorState.getCurrentContent())
       });
+
       const options = {
         body: rawJson,
         headers: {
@@ -58,8 +79,33 @@ class NoteEditor extends React.Component {
         method: 'PUT'
       }
 
-      fetch('/api/v1/notes/'+this.state.currentNote.id, options)
-        .then(res => console.log(res));
+      if(!this.state.currentNote) {
+        const options = {
+          body: rawJson,
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST'
+        }
+        fetch('/api/v1/notes/', options)
+          .then(res => res.json())
+          .then(res => {
+            this.setState({currentNote: res})
+            this.props.onListUpdate();
+          });
+      }else{       
+        const options = {
+          body: rawJson,
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'PUT'
+        }
+        fetch('/api/v1/notes/'+this.state.currentNote.id, options)
+          .then(res => {
+            this.props.onListUpdate();
+          });
+      }
     }
   }
 
@@ -76,7 +122,15 @@ class NoteEditor extends React.Component {
     const onClick = (type) => this._onClick.bind(this, type);
     return (
         <div id="note-editor-container">
-          <h1>{this.props.currentNote && this.props.currentNote.title}</h1>
+          <div id="title-editor">
+            <Editor
+              handleKeyCommand={this.handleKeyCommand}
+              keyBindingFn={myKeyBindingFn}
+              textAlignment="center"
+              editorState={this.state.titleEditorState}
+              onChange={this.onTitleChange}
+            />
+          </div>
           <button className="link" onClick={onClick('H1')}>H1</button>
           <button className="link" onClick={onClick('H2')}>H2</button>
           <button className="link" onClick={onClick('H3')}>H3</button>
@@ -99,7 +153,7 @@ class NoteEditor extends React.Component {
   }
 }
 
-const moveSelectionToEnd = (editorState) => {
+/*const moveSelectionToEnd = (editorState) => {
   const content = editorState.getCurrentContent();
   const blockMap = content.getBlockMap();
 
@@ -114,7 +168,7 @@ const moveSelectionToEnd = (editorState) => {
   });
 
   return EditorState.acceptSelection(editorState, selection);
-};
+};*/
 
 
 export default NoteEditor

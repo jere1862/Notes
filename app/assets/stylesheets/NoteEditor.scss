@@ -29,9 +29,17 @@
     }
 }
 
+#title-editor {
+    margin: 2%;
+}
+
 #text-editor {
     padding: 0 5%;
     height: 100%;
+}
+
+.align-center {
+    text-align: center !important;
 }
 
 
@@ -43,8 +51,4 @@
 ::selection {
     color: $lightest-color;
     background: $darkest-color;
-}
-
-.heading1 {
-    color: red;
 }
