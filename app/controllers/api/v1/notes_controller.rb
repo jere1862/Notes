@@ -19,12 +19,14 @@ class Api::V1::NotesController < Api::V1::BaseController
 
     def update
         @note = Note.find(params[:id])
-        respond_with @note.update(note_params)
+        @note.update(note_params)
+        respond_with @note
     end
 
     def create
         @note = Note.new(note_params)
         @note.save
+        puts @note.inspect
         respond_with @note
     end
 
