@@ -15,10 +15,12 @@ class NotesContainer extends React.Component {
     this.setState({currentNote: null})
   }
 
-  onListUpdate() {
+  onListUpdate(currentNote) {
     fetch("/api/v1/notes.json")
       .then(res => res.json())
-      .then(res => this.setState({notes: res}));
+      .then(res => {
+        this.setState({notes: res, currentNote: currentNote})
+      });
   }
 
   onNewNote(note) {

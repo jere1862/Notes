@@ -38,10 +38,23 @@ class NoteEditor extends React.Component {
     
     this.state.titleEditorState = EditorState.createWithContent(this.setTitle(this.state.currentNote && this.state.currentNote.title || "New note"));
     
-    this.onChange = (editorState) => this.setState({editorState});
+    
+    this.onChange = (editorState) => {
+      let nextEditorState = Object.assign(editorState);
+
+      if(editorState.getCurrentContent().getPlainText() == this.buffer) {
+        //nextEditorState = EditorState.moveFocusToEnd(editorState);
+      }
+      this.buffer = editorState.getCurrentContent().getPlainText();
+
+      let currentNoteCopy = Object.assign({}, this.state.currentNote);
+      currentNoteCopy.rawtext = convertToRaw(editorState.getCurrentContent());
+      this.setState({editorState: nextEditorState, currentNote: currentNoteCopy});
+    };
     this.onTitleChange = (titleEditorState) => {
       const currentNote = Object.assign({}, this.state.currentNote);
-      currentNote.title = this.getTitle(titleEditorState);
+
+      currentNote.title = this.getTitleFromState(titleEditorState);
       this.setState({titleEditorState: titleEditorState, currentNote: currentNote});
     }
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
@@ -52,14 +65,19 @@ class NoteEditor extends React.Component {
     return ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
   }
 
-  getTitle(titleEditorState) {
-    return this.state.titleEditorState.getCurrentContent().getPlainText();
+  getTitleFromState(titleEditorState) {
+    return titleEditorState.getCurrentContent().getPlainText();
   }
 
   componentWillReceiveProps(nextProps) {
+    let rawText = nextProps.currentNote.rawtext;
+    let newTitleEditorState = EditorState.createWithContent(this.setTitle(nextProps.currentNote && nextProps.currentNote.title || "New note"));
+    let newEditorState = EditorState.createWithContent(convertFromRaw(rawText));
+    this.editorRef.focus();
     this.setState({
       currentNote: nextProps.currentNote,
-      titleEditorState: EditorState.createWithContent(this.setTitle(nextProps.currentNote && nextProps.currentNote.title || "New note"))
+      editorState: newEditorState,
+      titleEditorState: EditorState.moveSelectionToEnd(newTitleEditorState)
     });
   }
 
@@ -68,7 +86,6 @@ class NoteEditor extends React.Component {
   }
 
   handleKeyCommand(command) {
-    // Todo: 
     if(command == 'editor-save') {
       const rawJson = JSON.stringify({
         title: this.state.titleEditorState.getCurrentContent().getPlainText(),
@@ -85,6 +102,7 @@ class NoteEditor extends React.Component {
       }
 
       if(!this.state.currentNote) {
+        this.titleEditorRef.focus();
         const options = {
           body: rawJson,
           headers: {
@@ -97,7 +115,7 @@ class NoteEditor extends React.Component {
           .then(res => {
             this.setState({currentNote: res})
             this.props.onNewNote(res);
-            this.props.onListUpdate();
+            this.props.onListUpdate(res);
           });
       }else{       
         const options = {
@@ -109,8 +127,7 @@ class NoteEditor extends React.Component {
         }
         fetch('/api/v1/notes/'+this.state.currentNote.id, options)
           .then(res => {
-            this.props.onListUpdate();
-            this.props.onNewNote(this.state.currentNote);
+            this.props.onListUpdate(this.state.currentNote);
           });
       }
     }
@@ -136,6 +153,7 @@ class NoteEditor extends React.Component {
               textAlignment="center"
               editorState={this.state.titleEditorState}
               onChange={this.onTitleChange}
+              ref={ref => this.titleEditorRef = ref}
             />
           </div>
           <button className="link" onClick={onClick('H1')}>H1</button>
@@ -160,7 +178,7 @@ class NoteEditor extends React.Component {
   }
 }
 
-/*const moveSelectionToEnd = (editorState) => {
+const moveSelectionToEnd = (editorState) => {
   const content = editorState.getCurrentContent();
   const blockMap = content.getBlockMap();
 
@@ -175,7 +193,7 @@ class NoteEditor extends React.Component {
   });
 
   return EditorState.acceptSelection(editorState, selection);
-};*/
+};
 
 
 export default NoteEditor

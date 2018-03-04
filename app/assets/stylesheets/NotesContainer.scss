@@ -5,16 +5,14 @@
 }
 
 #notes-container {
-    @extend %drop-shadow;
     border-radius: 20px;
     height: 100%;
     width: 100%;
-    background-color: $primary-color;
+    background-color: transparent;
     display: flex;
     padding: 3% 2%;
 
     >div {
-        @extend %drop-shadow;
         margin: 0 1.5%;
     }
 
@@ -22,10 +20,9 @@
 }
 
 #note-list {
-    @extend %drop-shadow;
     height: 100%;
     width: 23%;
-    background-color: $lighter-color;
+    background-color: transparent;
     padding: 0 0.5%;
     padding-bottom: 0;
 
@@ -45,7 +42,7 @@
 
 #button-list {
     > button{
-        background-color: $primary-color;
+        background-color: $lightest-color;
         font-size: x-large;
         border: none;
         color: $darkest-color;
