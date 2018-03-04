@@ -17,8 +17,8 @@ class NoteList extends React.Component {
         </div>
         <div id="note-list-elements">
           {
-            this.props.notes.map((note, index) => (
-              <NoteListElement key={index} noteTitle={note.title}></NoteListElement>
+            this.props.notes.sort((a,b)=>b.id-a.id).map((note, index) => (
+              <NoteListElement key={note.id} noteTitle={note.title} onClickHandler={this.props.onElementClickHandler.bind(null, note)}></NoteListElement>
             ))
           }
         </div>

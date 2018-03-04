@@ -30,7 +30,6 @@ const toH1Markup = (text) => `<h1>${text}</h1>`
 class NoteEditor extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       currentNote: this.props.currentNote,
       editorState: EditorState.createEmpty()
@@ -60,10 +59,6 @@ class NoteEditor extends React.Component {
   }
 
   handleKeyCommand(command) {
-    // Bug:
-    // Save new note
-    // Note gets added to the note list
-    // Current note does not get assigned to the new note
     if(command == 'editor-save') {
       const rawJson = JSON.stringify({
         title: this.state.titleEditorState.getCurrentContent().getPlainText(),
