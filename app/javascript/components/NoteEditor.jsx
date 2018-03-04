@@ -40,16 +40,9 @@ class NoteEditor extends React.Component {
     
     
     this.onChange = (editorState) => {
-      let nextEditorState = Object.assign(editorState);
-
-      if(editorState.getCurrentContent().getPlainText() == this.buffer) {
-        //nextEditorState = EditorState.moveFocusToEnd(editorState);
-      }
-      this.buffer = editorState.getCurrentContent().getPlainText();
-
       let currentNoteCopy = Object.assign({}, this.state.currentNote);
       currentNoteCopy.rawtext = convertToRaw(editorState.getCurrentContent());
-      this.setState({editorState: nextEditorState, currentNote: currentNoteCopy});
+      this.setState({editorState: editorState, currentNote: currentNoteCopy});
     };
     this.onTitleChange = (titleEditorState) => {
       const currentNote = Object.assign({}, this.state.currentNote);
@@ -70,10 +63,22 @@ class NoteEditor extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let rawText = nextProps.currentNote.rawtext;
+    let rawText = nextProps.currentNote && nextProps.currentNote.rawtext;
+
+    if (!(nextProps.currentNote && nextProps.currentNote.title )){
+      this.titleEditorRef.focus();
+      
+    }else{
+      this.editorRef.focus();
+    }
+
     let newTitleEditorState = EditorState.createWithContent(this.setTitle(nextProps.currentNote && nextProps.currentNote.title || "New note"));
-    let newEditorState = EditorState.createWithContent(convertFromRaw(rawText));
-    this.editorRef.focus();
+    let newEditorState;
+    if(rawText) {
+      newEditorState = EditorState.createWithContent(convertFromRaw(rawText));
+    }else{
+      newEditorState = EditorState.createEmpty();
+    }
     this.setState({
       currentNote: nextProps.currentNote,
       editorState: newEditorState,
