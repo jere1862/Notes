@@ -32,10 +32,15 @@ class NoteEditor extends React.Component {
     super(props);
 
     this.state = {
-      currentNote: this.props.currentNote,
-      editorState: EditorState.createEmpty()
+      currentNote: this.props.currentNote
     };
     
+    if(this.state.currentNote && this.state.currentNote.rawtext) {
+      this.state.editorState = EditorState.createWithContent(convertFromRaw(this.state.currentNote && this.state.currentNote.rawtext));
+    }else{
+      this.state.editorState = EditorState.createEmpty();
+    }
+
     this.state.titleEditorState = EditorState.createWithContent(this.setTitle(this.state.currentNote && this.state.currentNote.title || "New note"));
     
     
@@ -104,9 +109,8 @@ class NoteEditor extends React.Component {
           'content-type': 'application/json'
         },
         method: 'PUT'
-      }
-
-      if(!this.state.currentNote) {
+      }    
+      if(!this.state.currentNote.id) {
         this.titleEditorRef.focus();
         const options = {
           body: rawJson,
@@ -122,7 +126,7 @@ class NoteEditor extends React.Component {
             this.props.onNewNote(res);
             this.props.onListUpdate(res);
           });
-      }else{       
+      }else{
         const options = {
           body: rawJson,
           headers: {
