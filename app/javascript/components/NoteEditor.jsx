@@ -39,11 +39,7 @@ class NoteEditor extends React.Component {
     this.state.titleEditorState = EditorState.createWithContent(this.setTitle(this.state.currentNote && this.state.currentNote.title || "New note"));
     
     this.onChange = (editorState) => this.setState({editorState});
-    this.onTitleChange = (titleEditorState) => {
-      const currentNote = Object.assign({}, this.state.currentNote);
-      currentNote.title = this.getTitle(titleEditorState);
-      this.setState({titleEditorState: titleEditorState, currentNote: currentNote});
-    }
+    this.onTitleChange = (titleEditorState) => this.setState({titleEditorState})
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
   }
 
@@ -52,14 +48,10 @@ class NoteEditor extends React.Component {
     return ContentState.createFromBlockArray(blocksFromHTML.contentBlocks, blocksFromHTML.entityMap);
   }
 
-  getTitle(titleEditorState) {
-    return this.state.titleEditorState.getCurrentContent().getPlainText();
-  }
-
   componentWillReceiveProps(nextProps) {
     this.setState({
-      currentNote: nextProps.currentNote,
-      titleEditorState: EditorState.createWithContent(this.setTitle(nextProps.currentNote && nextProps.currentNote.title || "New note"))
+      //currentNote: nextProps.currentNote,
+      //titleEditorState: EditorState.createWithContent(this.setTitle(nextProps.title || "New note"))
     });
   }
 
@@ -68,7 +60,10 @@ class NoteEditor extends React.Component {
   }
 
   handleKeyCommand(command) {
-    // Todo: 
+    // Bug:
+    // Save new note
+    // Note gets added to the note list
+    // Current note does not get assigned to the new note
     if(command == 'editor-save') {
       const rawJson = JSON.stringify({
         title: this.state.titleEditorState.getCurrentContent().getPlainText(),
@@ -93,10 +88,9 @@ class NoteEditor extends React.Component {
           method: 'POST'
         }
         fetch('/api/v1/notes/', options)
-          .then(res =>res.json())
+          .then(res => res.json())
           .then(res => {
             this.setState({currentNote: res})
-            this.props.onNewNote(res);
             this.props.onListUpdate();
           });
       }else{       
@@ -110,7 +104,6 @@ class NoteEditor extends React.Component {
         fetch('/api/v1/notes/'+this.state.currentNote.id, options)
           .then(res => {
             this.props.onListUpdate();
-            this.props.onNewNote(this.state.currentNote);
           });
       }
     }

@@ -16,6 +16,7 @@ class NotesContainer extends React.Component {
   }
 
   onListUpdate() {
+    console.log(this.state.currentNote)
     fetch("/api/v1/notes.json")
       .then(res => res.json())
       .then(res => this.setState({notes: res}));
@@ -25,14 +26,10 @@ class NotesContainer extends React.Component {
     this.setState({currentNote: note})
   }
 
-  onElementClick(note){
-    this.setState({currentNote: note});
-  }
-
   render () {
     return (
       <div id="notes-container">
-        <NoteList notes={this.state.notes} clickHandler={this.onButtonClick.bind(this)} onElementClickHandler={this.onElementClick.bind(this)}></NoteList>
+        <NoteList notes={this.state.notes} clickHandler={this.onButtonClick.bind(this)}></NoteList>
         <NoteEditor
           noteTitle="Test"
           currentNote={this.state.currentNote}
